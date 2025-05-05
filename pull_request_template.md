@@ -1,1 +1,1 @@
-Please include your Netlify link here.
+https://js-happy-thoughts.netlify.app

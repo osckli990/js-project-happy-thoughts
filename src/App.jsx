@@ -1,5 +1,6 @@
+import { mainCard } from "./sections/mainCard";
+import { thoughtCard } from "./sections/thoughtCard";
+
 export const App = () => {
-  return (
-    <h1>Happy Thoughts</h1>
-  )
-}
+  return <mainCard />;
+};
