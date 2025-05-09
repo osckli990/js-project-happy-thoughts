@@ -1,7 +1,7 @@
-export const Thought = () => {
+export const Thought = ({ message }) => {
   return (
     <>
-      <h2 className="col-span-2 mb-[5px]">It's my birthday!!!</h2>
+      <h2 className="col-span-2 mb-[5px]">{message}</h2>
     </>
   );
 };
