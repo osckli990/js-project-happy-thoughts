@@ -22,10 +22,6 @@ img {
   height: 20px;
 }
 
-p {
-  color: rgba(119, 119, 119, 255);
-}
-
 textarea:focus,
 input:focus {
   outline: 3px solid rgba(255, 173, 173, 255);

@@ -1,6 +1,5 @@
 import { MainCard } from "./mainCard";
 import { ThoughtCard } from "./thoughtCard";
-import { ErrorCard } from "./ErrorCard";
 import { useState, useEffect } from "react";
 import { LoadingCard } from "./LoadingCard";
 
@@ -20,7 +19,6 @@ export const MainSection = () => {
         // set the state to pokemons array
         setThoughts(data);
         setLoading(false);
-        console.log("data", data);
       }
     } catch (error) {
       console.log(error);
@@ -32,6 +30,7 @@ export const MainSection = () => {
   useEffect(() => {
     fetchData();
   }, [setThoughts]);
+  //useEffect eludes me, remember to do further research
 
   if (loading === true) {
     return (
@@ -44,7 +43,6 @@ export const MainSection = () => {
   return (
     <main className="w-full sm:w-[500px] mx-auto grid grid-cols-1 gap-[40px] mt-[40px] mb-[50px]">
       <MainCard
-        thought={thought}
         setThoughts={setThoughts}
         newThought={newThought}
         setNewThought={setNewThought}
@@ -53,3 +51,5 @@ export const MainSection = () => {
     </main>
   );
 };
+
+//if you're reading this, have a good day

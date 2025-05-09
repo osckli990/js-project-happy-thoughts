@@ -4,7 +4,7 @@ import { format } from "timeago.js";
 export const Time = ({ time }) => {
   return (
     <div id="timeBox" className="text-end">
-      <p>{format(time)}</p>
+      <p className="text-extragrey">{format(time)}</p>
     </div>
   );
 };

@@ -9,7 +9,7 @@ export const ThoughtCard = ({ thought, setThoughts }) => {
         <article
           key={item._id}
           id="ThoughtCard"
-          className="grid grid-cols-2 w-full border-1 border-bordergrey  shadow-smallscreenbox sm:shadow-box p-[20px] items-center"
+          className="grid grid-cols-2 w-full border-1 border-bordergrey  shadow-smallscreenbox sm:shadow-box p-[20px] items-center box-border animate-[wiggle_1s_ease-in-out]"
         >
           <Thought message={item.message} />
           <Heart id={item._id} hearts={item.hearts} setThoughts={setThoughts} />

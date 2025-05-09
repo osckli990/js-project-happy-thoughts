@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export const Heart = ({ id, hearts, setThoughts }) => {
   const handleLike = async () => {
     try {
@@ -34,8 +32,8 @@ export const Heart = ({ id, hearts, setThoughts }) => {
       >
         <img src="./heart.png" alt="" role="presentation" />
       </div>
-      <p className="text-[10px]">X</p>
-      <p className="text-[16px]">{hearts}</p>
+      <p className="text-[10px] text-extragrey">X</p>
+      <p className="text-[16px] text-extragrey">{hearts}</p>
     </div>
   );
 };

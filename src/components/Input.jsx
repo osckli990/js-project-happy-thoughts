@@ -1,9 +1,18 @@
-export const Input = ({ thought, setThoughts, newThought, setNewThought }) => {
+import { useState } from "react";
+
+export const Input = ({ setThoughts, newThought, setNewThought }) => {
+  const [loading, setLoading] = useState(false);
+
+  const maxChars = 140;
+  const minChars = 5;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(thought);
 
-    if (!newThought.trim()) return; // Optional: avoid empty messages
+    if (newThought.trim().length < minChars || newThought.length > maxChars)
+      return;
+
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -30,8 +39,15 @@ export const Input = ({ thought, setThoughts, newThought, setNewThought }) => {
       setNewThought("");
     } catch (error) {
       console.error("Error posting thought:", error);
+    } finally {
+      setLoading(false); //end loading. will run no matter what though
     }
   };
+
+  const charCount = newThought.length;
+  const isTooShort = charCount > 0 && charCount < minChars;
+  const isMax = charCount === maxChars;
+  const isTooLong = charCount > maxChars;
 
   return (
     <form
@@ -42,20 +58,46 @@ export const Input = ({ thought, setThoughts, newThought, setNewThought }) => {
       <label form="Thought" className="text-[16px]">
         What's making you happy right now?
       </label>
-      <input
-        type="text"
+      <textarea
+        maxLength={maxChars}
         placeholder="React is making me happy!"
-        id="Thought"
-        className=" bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergre text-[16px]"
-        onChange={(e) => setNewThought(e.target.value)}
+        id="textArea"
+        value={newThought}
+        className=" bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergrey text-[16px]"
+        onChange={(e) => {
+          const value = e.target.value;
+          if (value.length <= maxChars) {
+            setNewThought(value);
+          }
+        }}
+        rows={4}
       />
+
+      {/* Character counter & validation feedback */}
+      <p
+        className={`text-sm ${
+          isTooShort || isMax ? "text-red-500" : "text-extragrey"
+        }`}
+      >
+        {charCount}/{maxChars} characters
+        {isTooShort && " — too short!"}
+        {isTooLong && " — too long!"}
+        {/*since the textarea is capped, this currently doesn't display*/}
+        {isMax && " — limit reached!"}
+      </p>
+
       <button
         type="submit"
         id="buttonBox"
-        className="flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit cursor-pointer text-[16px]"
+        disabled={isTooShort || isTooLong || loading}
+        className={`flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit cursor-pointer text-[16px] ${
+          isTooShort || isTooLong || loading
+            ? "opacity-50 cursor-not-allowed"
+            : ""
+        }`}
       >
         <img src="./heart.png" alt="" role="presentation" />
-        Send Happy Thought
+        {loading ? "Sending..." : "Send Happy Thought"}
         <img src="./heart.png" alt="" role="presentation" />
       </button>
     </form>
