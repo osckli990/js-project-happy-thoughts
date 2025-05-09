@@ -2,11 +2,13 @@ import { MainCard } from "./mainCard";
 import { ThoughtCard } from "./thoughtCard";
 import { ErrorCard } from "./ErrorCard";
 import { useState, useEffect } from "react";
+import { LoadingCard } from "./LoadingCard";
 
 export const MainSection = () => {
   //Should all code go here?
   const url = "https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts";
 
+  const [loading, setLoading] = useState(true);
   const [thought, setThoughts] = useState([]);
   const [newThought, setNewThought] = useState("");
 
@@ -17,6 +19,7 @@ export const MainSection = () => {
         const data = await response.json();
         // set the state to pokemons array
         setThoughts(data);
+        setLoading(false);
         console.log("data", data);
       }
     } catch (error) {
@@ -29,6 +32,14 @@ export const MainSection = () => {
   useEffect(() => {
     fetchData();
   }, [setThoughts]);
+
+  if (loading === true) {
+    return (
+      <main className="w-full sm:w-[500px] mx-auto grid grid-cols-1 gap-[40px] mt-[40px] mb-[50px]">
+        <LoadingCard />
+      </main>
+    );
+  }
 
   return (
     <main className="w-full sm:w-[500px] mx-auto grid grid-cols-1 gap-[40px] mt-[40px] mb-[50px]">

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export const Heart = ({ id, hearts, setThoughts }) => {
   const handleLike = async () => {
     try {
@@ -10,7 +12,7 @@ export const Heart = ({ id, hearts, setThoughts }) => {
 
       if (!response.ok) throw new Error("Failed to like the thought");
 
-      // Optimistically update UI
+      // Optimistically update ui
       setThoughts((prev) =>
         prev.map((thought) =>
           thought._id === id
