@@ -2,6 +2,7 @@ import { MainCard } from "./mainCard";
 import { ThoughtCard } from "./thoughtCard";
 import { useState, useEffect } from "react";
 import { LoadingCard } from "./LoadingCard";
+import { ErrorCard } from "./ErrorCard";
 
 export const MainSection = () => {
   //Should all code go here?
@@ -16,13 +17,16 @@ export const MainSection = () => {
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        // set the state to pokemons array
         setThoughts(data);
         setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      <main className="w-full sm:w-[500px] mx-auto grid grid-cols-1 gap-[40px] mt-[40px] mb-[50px]">
+        <ErrorCard />
+      </main>;
     } finally {
+      setLoading(false);
       // this block executes no matter what, wheter there was an error or not.
     }
   };

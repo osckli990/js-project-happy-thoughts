@@ -55,7 +55,7 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
       className="grid grid-cols-1 gap-[10px]"
       onSubmit={handleSubmit}
     >
-      <label form="Thought" className="text-[16px]">
+      <label form="thoughtFrom" for="thoughtForm" className="text-[16px]">
         What's making you happy right now?
       </label>
       <textarea
@@ -90,10 +90,10 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
         type="submit"
         id="buttonBox"
         disabled={isTooShort || isTooLong || loading}
-        className={`flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit cursor-pointer text-[16px] ${
+        className={`flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit text-[16px] ${
           isTooShort || isTooLong || loading
             ? "opacity-50 cursor-not-allowed"
-            : ""
+            : "cursor-pointer"
         }`}
       >
         <img src="./heart.png" alt="" role="presentation" />

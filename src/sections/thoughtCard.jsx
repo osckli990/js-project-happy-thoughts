@@ -14,8 +14,8 @@ export const ThoughtCard = ({ thought, setThoughts }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           key={item._id}
-          id="ThoughtCard"
           className="grid grid-cols-2 w-full border-1 border-bordergrey  shadow-smallscreenbox sm:shadow-box p-[20px] items-center"
+          tabIndex={0}
         >
           <Thought message={item.message} />
           <Heart id={item._id} hearts={item.hearts} setThoughts={setThoughts} />

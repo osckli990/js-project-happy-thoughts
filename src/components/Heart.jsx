@@ -24,11 +24,11 @@ export const Heart = ({ id, hearts, setThoughts }) => {
   };
 
   return (
-    <div id="fullBox" className="flex items-center gap-[5px]">
+    <div className="flex items-center gap-[5px] like-class">
       <div
         onClick={handleLike}
-        id="heartBox"
         className="bg-heartgrey size-[50px] rounded-full flex items-center justify-center cursor-pointer hover:bg-heartred"
+        tabIndex={0}
       >
         <img src="./heart.png" alt="" role="presentation" />
       </div>
