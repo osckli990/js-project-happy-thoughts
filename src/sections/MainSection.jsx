@@ -6,7 +6,7 @@ import { ErrorCard } from "./ErrorCard";
 
 export const MainSection = () => {
   //Should all code go here?
-  const url = "https://happy-thoughts-ux7hkzgmwa-uc.a.run.app/thoughts";
+  const url = "https://happy-thoughts-api-4ful.onrender.com/thoughts";
 
   const [loading, setLoading] = useState(true);
   const [thought, setThoughts] = useState([]);
