@@ -1,8 +1,10 @@
+import { API_URL } from "../api";
+
 export const Heart = ({ id, hearts, setThoughts }) => {
   const handleLike = async () => {
     try {
       const response = await fetch(
-        `https://happy-thoughts-api-4ful.onrender.com/thoughts/${id}/like`,
+        `https://js-project-api-48mm.onrender.com/thoughts${id}/like`,
         {
           method: "POST",
         }

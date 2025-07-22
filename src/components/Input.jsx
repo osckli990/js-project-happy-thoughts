@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../api";
 
 export const Input = ({ setThoughts, newThought, setNewThought }) => {
   const [loading, setLoading] = useState(false);
@@ -15,16 +16,13 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "https://happy-thoughts-api-4ful.onrender.com/thoughts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: newThought }),
-        }
-      );
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: newThought }),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to post the thought");
@@ -100,10 +98,7 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
         {loading ? "Sending..." : "Send Happy Thought"}
         <img src="./heart.png" alt="" role="presentation" />
       </button>
+      {/*this is all very hard to read, might simplify */}
     </form>
   );
 };
-
-/*
-add counter for input character length  
-*/

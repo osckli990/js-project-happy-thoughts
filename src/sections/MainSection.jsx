@@ -3,10 +3,14 @@ import { ThoughtCard } from "./thoughtCard";
 import { useState, useEffect } from "react";
 import { LoadingCard } from "./LoadingCard";
 import { ErrorCard } from "./ErrorCard";
+import { API_URL } from "../api";
 
 export const MainSection = () => {
-  //Should all code go here?
-  const url = "https://happy-thoughts-api-4ful.onrender.com/thoughts";
+  /*
+  old url for earlier school period.
+  const url_old = "https://happy-thoughts-api-4ful.onrender.com/thoughts";
+  */
+  const url = API_URL;
 
   const [loading, setLoading] = useState(true);
   const [thought, setThoughts] = useState([]);
@@ -55,5 +59,3 @@ export const MainSection = () => {
     </main>
   );
 };
-
-//if you're reading this, have a good day
