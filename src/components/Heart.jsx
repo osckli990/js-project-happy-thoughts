@@ -4,12 +4,12 @@ export const Heart = ({ id, hearts, setThoughts }) => {
   const handleLike = async () => {
     try {
       const response = await fetch(
-        `https://js-project-api-48mm.onrender.com/thoughts${id}/like`,
+        `https://js-project-api-48mm.onrender.com/thoughts/${id}/like`,
         {
           method: "POST",
         }
       );
-
+      console.log("Liking id:", id);
       if (!response.ok) throw new Error("Failed to like the thought");
 
       // Optimistically update ui

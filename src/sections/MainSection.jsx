@@ -21,7 +21,7 @@ export const MainSection = () => {
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        setThoughts(data);
+        setThoughts(data.results);
         setLoading(false);
       }
     } catch (error) {
