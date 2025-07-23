@@ -1,18 +1,19 @@
 import { API_URL } from "../api";
 
-export const Heart = ({ id, hearts, setThoughts }) => {
+export const Heart = ({ id, hearts, setThoughts, accessToken }) => {
   const handleLike = async () => {
+    if (!accessToken) return; // block if not logged in
+
     try {
-      const response = await fetch(
-        `https://js-project-api-48mm.onrender.com/thoughts/${id}/like`,
-        {
-          method: "POST",
-        }
-      );
-      console.log("Liking id:", id);
+      const response = await fetch(`${API_URL}/thoughts/${id}/like`, {
+        method: "POST",
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
       if (!response.ok) throw new Error("Failed to like the thought");
 
-      // Optimistically update ui
       setThoughts((prev) =>
         prev.map((thought) =>
           thought._id === id
@@ -29,7 +30,11 @@ export const Heart = ({ id, hearts, setThoughts }) => {
     <div className="flex items-center gap-[5px] like-class">
       <div
         onClick={handleLike}
-        className="bg-heartgrey size-[50px] rounded-full flex items-center justify-center cursor-pointer hover:bg-heartred"
+        className={`bg-heartgrey size-[50px] rounded-full flex items-center justify-center ${
+          accessToken
+            ? "cursor-pointer hover:bg-heartred"
+            : "opacity-50 cursor-not-allowed"
+        }`}
         tabIndex={0}
       >
         <img src="./heart.png" alt="" role="presentation" />
@@ -39,5 +44,3 @@ export const Heart = ({ id, hearts, setThoughts }) => {
     </div>
   );
 };
-
-/*if heart has likes, turn background red*/

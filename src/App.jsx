@@ -7,7 +7,12 @@ export const App = () => {
   return (
     <>
       <GlobalStyle />
-      <MainSection />
+      <MainSection
+        accessToken={accessToken}
+        loggedInUserId={userId}
+        setAccessToken={setAccessToken}
+        setUserId={setUserId}
+      />
     </>
   );
 };

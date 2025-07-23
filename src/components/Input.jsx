@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { API_URL } from "../api";
 
-export const Input = ({ setThoughts, newThought, setNewThought }) => {
+export const Input = ({
+  setThoughts,
+  newThought,
+  setNewThought,
+  accessToken,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const maxChars = 140;
@@ -9,6 +14,8 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!accessToken) return; // block if not logged in
 
     if (newThought.trim().length < minChars || newThought.length > maxChars)
       return;
@@ -20,6 +27,7 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: accessToken, // add token here
         },
         body: JSON.stringify({ message: newThought }),
       });
@@ -29,16 +37,12 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
       }
 
       const createdThought = await response.json();
-
-      // Add new thought to the top of the list
       setThoughts((prev) => [createdThought, ...prev]);
-
-      // Clear input field
       setNewThought("");
     } catch (error) {
       console.error("Error posting thought:", error);
     } finally {
-      setLoading(false); //end loading. will run no matter what though
+      setLoading(false);
     }
   };
 
@@ -47,13 +51,15 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
   const isMax = charCount === maxChars;
   const isTooLong = charCount > maxChars;
 
+  const isDisabled = isTooShort || isTooLong || loading || !accessToken;
+
   return (
     <form
       id="thoughtForm"
       className="grid grid-cols-1 gap-[10px]"
       onSubmit={handleSubmit}
     >
-      <label form="thoughtFrom" for="thoughtForm" className="text-[16px]">
+      <label htmlFor="thoughtForm" className="text-[16px]">
         What's making you happy right now?
       </label>
       <textarea
@@ -61,7 +67,7 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
         placeholder="React is making me happy!"
         id="textArea"
         value={newThought}
-        className=" bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergrey text-[16px]"
+        className="bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergrey text-[16px]"
         onChange={(e) => {
           const value = e.target.value;
           if (value.length <= maxChars) {
@@ -69,9 +75,9 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
           }
         }}
         rows={4}
+        disabled={!accessToken}
       />
 
-      {/* Character counter & validation feedback */}
       <p
         className={`text-sm ${
           isTooShort || isMax ? "text-red-500" : "text-extragrey"
@@ -80,25 +86,22 @@ export const Input = ({ setThoughts, newThought, setNewThought }) => {
         {charCount}/{maxChars} characters
         {isTooShort && " — too short!"}
         {isTooLong && " — too long!"}
-        {/*since the textarea is capped, this currently doesn't display*/}
         {isMax && " — limit reached!"}
+        {!accessToken && " — please log in to post"}
       </p>
 
       <button
         type="submit"
         id="buttonBox"
-        disabled={isTooShort || isTooLong || loading}
+        disabled={isDisabled}
         className={`flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit text-[16px] ${
-          isTooShort || isTooLong || loading
-            ? "opacity-50 cursor-not-allowed"
-            : "cursor-pointer"
+          isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
         }`}
       >
         <img src="./heart.png" alt="" role="presentation" />
         {loading ? "Sending..." : "Send Happy Thought"}
         <img src="./heart.png" alt="" role="presentation" />
       </button>
-      {/*this is all very hard to read, might simplify */}
     </form>
   );
 };
