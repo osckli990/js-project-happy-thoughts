@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { LoadingCard } from "./LoadingCard";
 import { ErrorCard } from "./ErrorCard";
 import { API_URL } from "../API";
-import { LoginForm } from "./components/LoginForm";
-import { RegisterForm } from "./components/RegisterForm";
+import { LoginForm } from "../components/LoginForm";
+import { RegisterForm } from "../components/RegisterForm";
 
 export const MainSection = ({
   accessToken,
@@ -55,7 +55,7 @@ export const MainSection = ({
         {!accessToken ? (
           <>
             <button
-              className="bg-blue-500 text-white px-4 py-1 rounded"
+              className="bg-black text-white px-4 py-2 rounded shadow-md hover:bg-gray-800 transition"
               onClick={() => {
                 setShowLogin(true);
                 setShowRegister(false);
@@ -64,7 +64,7 @@ export const MainSection = ({
               Login
             </button>
             <button
-              className="bg-green-500 text-white px-4 py-1 rounded"
+              className="bg-black text-white px-4 py-2 rounded shadow-md hover:bg-gray-800 transition"
               onClick={() => {
                 setShowRegister(true);
                 setShowLogin(false);
@@ -75,7 +75,7 @@ export const MainSection = ({
           </>
         ) : (
           <button
-            className="bg-gray-300 px-4 py-1 rounded font-bold"
+            className="bg-black text-white px-4 py-2 rounded shadow-md hover:bg-gray-800 transition"
             onClick={handleLogout}
           >
             Logout

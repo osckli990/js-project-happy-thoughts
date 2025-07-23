@@ -1,9 +1,22 @@
+import { useState, useEffect } from "react";
 import { GlobalStyle } from "./GlobalStyle";
-
 import { MainSection } from "./sections/MainSection";
 
 export const App = () => {
-  //Should all code go here?
+  const [accessToken, setAccessToken] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  // Load from localStorage on first load
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+    const storedId = localStorage.getItem("userId");
+
+    if (storedToken && storedId) {
+      setAccessToken(storedToken);
+      setUserId(storedId);
+    }
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -16,5 +29,4 @@ export const App = () => {
     </>
   );
 };
-
-/*move code outside of app*/
+/*move code outside of app?*/
