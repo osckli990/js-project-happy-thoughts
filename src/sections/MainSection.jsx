@@ -3,7 +3,7 @@ import { ThoughtCard } from "./ThoughtCard";
 import { useState, useEffect } from "react";
 import { LoadingCard } from "./LoadingCard";
 import { ErrorCard } from "./ErrorCard";
-import { API_URL } from "../api";
+import { API_URL } from "../API";
 import { LoginForm } from "./components/LoginForm";
 import { RegisterForm } from "./components/RegisterForm";
 
@@ -83,19 +83,19 @@ export const MainSection = ({
         )}
       </div>
 
-      {/* 🔽 Toggle login/register forms inline */}
       {showLogin && !accessToken && (
         <LoginForm
           setAccessToken={setAccessToken}
           setUserId={setUserId}
-          setView={() => setShowLogin(false)}
+          setView={setShowLogin}
         />
       )}
+
       {showRegister && !accessToken && (
         <RegisterForm
           setAccessToken={setAccessToken}
           setUserId={setUserId}
-          setView={() => setShowRegister(false)}
+          setView={setShowRegister}
         />
       )}
 
