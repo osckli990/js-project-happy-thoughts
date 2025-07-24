@@ -19,11 +19,12 @@ export const MainSection = ({
   const [error, setError] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [mode, setMode] = useState(null); // null | "login" | "register"
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/thoughts`);
+      const response = await fetch(API_URL);
       if (response.ok) {
         const data = await response.json();
         setThoughts(data.results);
@@ -38,9 +39,12 @@ export const MainSection = ({
     }
   };
 
+  //re-fetch data when user logs in
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (accessToken) {
+      fetchData();
+    }
+  }, [accessToken, loggedInUserId]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -103,7 +107,7 @@ export const MainSection = ({
         <LoadingCard />
       ) : error ? (
         <ErrorCard message={error} />
-      ) : (
+      ) : mode ? null : ( // ✅ If login or register is active, hide main content
         <>
           <MainCard
             setThoughts={setThoughts}

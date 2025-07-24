@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { API_URL } from "../API";
+import { API_URL, REG_URL } from "../API";
 
 export const RegisterForm = ({ setAccessToken, setUserId, setView }) => {
   const [email, setEmail] = useState(""); // Switched to email
@@ -11,7 +11,7 @@ export const RegisterForm = ({ setAccessToken, setUserId, setView }) => {
     setError("");
 
     try {
-      const res = await fetch(`${API_URL}/register`, {
+      const res = await fetch(`${REG_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -36,7 +36,7 @@ export const RegisterForm = ({ setAccessToken, setUserId, setView }) => {
   return (
     <form
       onSubmit={handleRegister}
-      className="bg-white border p-4 rounded shadow grid gap-3"
+      className="border-1 border-black bg-maingrey text-black p-4 rounded shadow-smallscreenbox grid gap-3"
     >
       <h2 className="text-lg font-bold">Register</h2>
       {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -62,7 +62,7 @@ export const RegisterForm = ({ setAccessToken, setUserId, setView }) => {
 
       <button
         type="submit"
-        className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
+        className="bg-black text-white p-2 rounded shadow-md hover:bg-gray-800 transition"
       >
         Register
       </button>

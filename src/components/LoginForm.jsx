@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { API_URL } from "../API";
+import { API_URL, LOGIN_URL } from "../API";
 
 export const LoginForm = ({ setAccessToken, setUserId, setView }) => {
   const [email, setEmail] = useState(""); // Changed to email!
@@ -11,7 +11,7 @@ export const LoginForm = ({ setAccessToken, setUserId, setView }) => {
     setError("");
 
     try {
-      const res = await fetch(`${API_URL}/login`, {
+      const res = await fetch(LOGIN_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -36,7 +36,7 @@ export const LoginForm = ({ setAccessToken, setUserId, setView }) => {
   return (
     <form
       onSubmit={handleLogin}
-      className="bg-white border p-4 rounded shadow grid gap-3"
+      className="border-1 border-black bg-maingrey text-black p-4 rounded shadow-smallscreenbox grid gap-3"
     >
       <h2 className="text-lg font-bold">Login</h2>
       {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -61,7 +61,7 @@ export const LoginForm = ({ setAccessToken, setUserId, setView }) => {
 
       <button
         type="submit"
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        className="bg-black text-white p-2 rounded shadow-md hover:bg-gray-800 transition"
       >
         Log In
       </button>
