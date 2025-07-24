@@ -59,7 +59,7 @@ export const Input = ({
       className="grid grid-cols-1 gap-[10px]"
       onSubmit={handleSubmit}
     >
-      <label htmlFor="thoughtForm" className="text-[16px] text-white">
+      <label htmlFor="thoughtForm" className="text-[16px]">
         What's making you happy right now?
       </label>
       <textarea
@@ -67,7 +67,7 @@ export const Input = ({
         placeholder="React is making me happy!"
         id="textArea"
         value={newThought}
-        className="bg-white p-[10px] h-[60px] pb-[30px] border-1 border-gray-300 text-[16px] text-white"
+        className="bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergrey text-[16px]"
         onChange={(e) => {
           const value = e.target.value;
           if (value.length <= maxChars) {
@@ -94,7 +94,7 @@ export const Input = ({
         type="submit"
         id="buttonBox"
         disabled={isDisabled}
-        className={`flex px-[25px] mt-[10px] gap-[5px] bg-black hover:bg-neutral-800 place-items-center h-[50px] rounded-full w-fit text-[16px] text-white ${
+        className={`flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit text-[16px] ${
           isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
         }`}
       >

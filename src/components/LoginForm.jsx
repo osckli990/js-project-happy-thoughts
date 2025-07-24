@@ -36,7 +36,7 @@ export const LoginForm = ({ setAccessToken, setUserId, setView }) => {
   return (
     <form
       onSubmit={handleLogin}
-      className="border-1 border-black bg-[#f9f9f9] text-black p-4 rounded shadow-box grid gap-3"
+      className="border-1 border-black bg-maingrey text-black p-4 rounded shadow-smallscreenbox grid gap-3"
     >
       <h2 className="text-lg font-bold">Login</h2>
       {error && <p className="text-red-500 text-sm">{error}</p>}

@@ -17,6 +17,8 @@ export const MainSection = ({
   const [thought, setThoughts] = useState([]);
   const [newThought, setNewThought] = useState("");
   const [error, setError] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [mode, setMode] = useState(null); // null | "login" | "register"
 
   const fetchData = async () => {
@@ -37,6 +39,7 @@ export const MainSection = ({
     }
   };
 
+  //re-fetch data when user logs in
   useEffect(() => {
     if (accessToken) {
       fetchData();
@@ -47,79 +50,78 @@ export const MainSection = ({
     localStorage.clear();
     setAccessToken(null);
     setUserId(null);
-    setMode(null);
-    setThoughts([]);
   };
 
   return (
     <main className="w-full sm:w-[500px] mx-auto grid grid-cols-1 gap-[40px] mt-[40px] mb-[50px]">
-
-      {/* Auth UI toggles */}
-      <section className="flex justify-center gap-4 mb-4">
+      {/* 🔐 Auth toggle buttons */}
+      <div className="flex justify-between items-center mb-4">
         {!accessToken ? (
           <>
             <button
-              onClick={() => setMode("login")}
-              className="bg-black text-white px-4 py-2 rounded-full hover:opacity-80"
+              className="bg-black text-white px-4 py-2 rounded shadow-md hover:bg-gray-800 transition"
+              onClick={() => {
+                setShowLogin(true);
+                setShowRegister(false);
+              }}
             >
               Login
             </button>
             <button
-              onClick={() => setMode("register")}
-              className="bg-black text-white px-4 py-2 rounded-full hover:opacity-80"
+              className="bg-black text-white px-4 py-2 rounded shadow-md hover:bg-gray-800 transition"
+              onClick={() => {
+                setShowRegister(true);
+                setShowLogin(false);
+              }}
             >
               Register
             </button>
           </>
         ) : (
           <button
+            className="bg-black text-white px-4 py-2 rounded shadow-md hover:bg-gray-800 transition"
             onClick={handleLogout}
-            className="bg-black text-white px-4 py-2 rounded-full hover:opacity-80"
           >
             Logout
           </button>
         )}
-      </section>
+      </div>
 
-      {/* Conditional Forms */}
-      {mode === "login" && (
+      {showLogin && !accessToken && (
         <LoginForm
           setAccessToken={setAccessToken}
           setUserId={setUserId}
-          setMode={setMode}
-        />
-      )}
-      {mode === "register" && (
-        <RegisterForm
-          setAccessToken={setAccessToken}
-          setUserId={setUserId}
-          setMode={setMode}
+          setView={setShowLogin}
         />
       )}
 
-      {/* Main Content */}
-      {mode === null && (
+      {showRegister && !accessToken && (
+        <RegisterForm
+          setAccessToken={setAccessToken}
+          setUserId={setUserId}
+          setView={setShowRegister}
+        />
+      )}
+
+      {loading ? (
+        <LoadingCard />
+      ) : error ? (
+        <ErrorCard message={error} />
+      ) : mode ? null : ( // ✅ If login or register is active, hide main content
         <>
-          {loading ? (
-            <LoadingCard />
-          ) : error ? (
-            <ErrorCard message={error} />
-          ) : (
-            <>
-              <MainCard
-                setThoughts={setThoughts}
-                newThought={newThought}
-                setNewThought={setNewThought}
-                accessToken={accessToken}
-              />
-              <ThoughtCard
-                thought={thought}
-                setThoughts={setThoughts}
-                accessToken={accessToken}
-                loggedInUserId={loggedInUserId}
-              />
-            </>
-          )}
+          <MainCard
+            setThoughts={setThoughts}
+            newThought={newThought}
+            setNewThought={setNewThought}
+            accessToken={accessToken}
+          />
+
+          <ThoughtCard
+            thought={thought}
+            setThoughts={setThoughts}
+            accessToken={accessToken}
+            loggedInUserId={loggedInUserId}
+          />
         </>
       )}
     </main>
