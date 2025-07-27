@@ -36,7 +36,7 @@ export const LoginForm = ({ setAccessToken, setUserId }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid gap-4 border p-6 rounded shadow bg-white"
+      className="border-1 border-bordergrey w-full bg-maingrey shadow-smallscreenbox sm:shadow-box p-[20px] grid gap-[10px]"
     >
       <h2 className="text-xl font-semibold">Login</h2>
 
@@ -44,7 +44,7 @@ export const LoginForm = ({ setAccessToken, setUserId }) => {
         Email
         <input
           type="text"
-          className="block w-full mt-1 p-2 border border-gray-300 rounded"
+          className="bg-white p-[10px] w-full pb-[30px] border-1 border-bordergrey text-[16px]"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -55,7 +55,7 @@ export const LoginForm = ({ setAccessToken, setUserId }) => {
         Password
         <input
           type="password"
-          className="block w-full mt-1 p-2 border border-gray-300 rounded"
+          className="bg-white p-[10px] w-full pb-[30px] border-1 border-bordergrey text-[16px]"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required

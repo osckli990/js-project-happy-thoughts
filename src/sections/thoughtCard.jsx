@@ -11,13 +11,21 @@ export const ThoughtCard = ({
   accessToken,
   loggedInUserId,
 }) => {
+  // Normalize creatorId to a string, or null if anonymous
+  const creatorId = thought.createdBy
+    ? typeof thought.createdBy === "string"
+      ? thought.createdBy
+      : thought.createdBy._id?.toString()
+    : null;
+
+  // Only the real owner (and only if logged in) can edit/delete
+  const isOwner = Boolean(loggedInUserId) && creatorId === loggedInUserId;
+
   const handleDelete = async (id) => {
     try {
       const res = await fetch(`${BASE_URL}/thoughts/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: accessToken,
-        },
+        headers: { Authorization: accessToken },
       });
 
       if (res.status === 204) {
@@ -26,7 +34,7 @@ export const ThoughtCard = ({
         const data = await res.json();
         alert(data.error);
       }
-    } catch (err) {
+    } catch {
       alert("Error deleting thought");
     }
   };
@@ -75,7 +83,7 @@ export const ThoughtCard = ({
       />
       <Time time={thought.createdAt} />
 
-      {thought.createdBy === loggedInUserId && (
+      {isOwner && (
         <div className="col-span-2 mt-2 flex gap-3 justify-center">
           <button
             onClick={() => handleEdit(thought._id, thought.message)}
