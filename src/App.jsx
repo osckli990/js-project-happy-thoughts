@@ -1,32 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GlobalStyle } from "./GlobalStyle";
 import { MainSection } from "./sections/MainSection";
 
+/*
+  Handle global app state, persist login tokens, and load MainSection
+*/
 export const App = () => {
-  const [accessToken, setAccessToken] = useState(null);
-  const [userId, setUserId] = useState(null);
+  // Lazy initialize from localStorage
+  const [accessToken, setAccessTokenState] = useState(
+    () => localStorage.getItem("accessToken") || null
+  );
+  const [loggedInUserId, setUserIdState] = useState(
+    () => localStorage.getItem("userId") || null
+  );
 
-  // Load from localStorage on first load
-  useEffect(() => {
-    const storedToken = localStorage.getItem("accessToken");
-    const storedId = localStorage.getItem("userId");
-
-    if (storedToken && storedId) {
-      setAccessToken(storedToken);
-      setUserId(storedId);
+  // Wrapper to sync accessToken with both state and localStorage
+  const setAccessToken = (token) => {
+    if (token) {
+      localStorage.setItem("accessToken", token);
+    } else {
+      localStorage.removeItem("accessToken");
     }
-  }, []);
+    setAccessTokenState(token);
+  };
+
+  // Wrapper to sync userId with both state and localStorage
+  const setUserId = (id) => {
+    if (id) {
+      localStorage.setItem("userId", id);
+    } else {
+      localStorage.removeItem("userId");
+    }
+    setUserIdState(id);
+  };
 
   return (
     <>
       <GlobalStyle />
       <MainSection
         accessToken={accessToken}
-        loggedInUserId={userId}
         setAccessToken={setAccessToken}
+        loggedInUserId={loggedInUserId}
         setUserId={setUserId}
       />
     </>
   );
 };
-/*move code outside of app?*/

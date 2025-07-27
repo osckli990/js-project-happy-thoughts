@@ -13,7 +13,7 @@ export const MainCard = ({
     >
       {!accessToken && (
         <p className="text-center text-sm text-red-500">
-          You must be logged in to send a thought.
+          You must be logged in to edit, delete, or like a thought.
         </p>
       )}
       <Input

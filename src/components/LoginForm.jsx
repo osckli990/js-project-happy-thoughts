@@ -1,69 +1,74 @@
 import { useState } from "react";
-import { API_URL, LOGIN_URL } from "../API";
+import { API_URL, BASE_URL } from "../api";
 
-export const LoginForm = ({ setAccessToken, setUserId, setView }) => {
-  const [email, setEmail] = useState(""); // Changed to email!
+export const LoginForm = ({ setAccessToken, setUserId }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
-      const res = await fetch(LOGIN_URL, {
+      const res = await fetch(`${BASE_URL}/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
-      if (res.ok) {
-        setAccessToken(data.accessToken);
-        setUserId(data.id);
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("userId", data.id);
-        setView(null); // Close form
-      } else {
-        setError(data.error || "Login failed");
+      if (!res.ok) {
+        setErrorMsg(data.error || "Something went wrong");
+        return;
       }
-    } catch {
-      setError("Something went wrong");
+
+      setAccessToken(data.accessToken);
+      setUserId(data.id);
+      setErrorMsg("");
+    } catch (err) {
+      setErrorMsg("Something went wrong. Please try again.");
     }
   };
 
   return (
     <form
-      onSubmit={handleLogin}
-      className="border-1 border-black bg-maingrey text-black p-4 rounded shadow-smallscreenbox grid gap-3"
+      onSubmit={handleSubmit}
+      className="grid gap-4 border p-6 rounded shadow bg-white"
     >
-      <h2 className="text-lg font-bold">Login</h2>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <h2 className="text-xl font-semibold">Login</h2>
 
-      <input
-        type="email"
-        placeholder="Email"
-        className="border p-2 rounded"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
+      <label className="text-sm">
+        Email
+        <input
+          type="text"
+          className="block w-full mt-1 p-2 border border-gray-300 rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </label>
 
-      <input
-        type="password"
-        placeholder="Password"
-        className="border p-2 rounded"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+      <label className="text-sm">
+        Password
+        <input
+          type="password"
+          className="block w-full mt-1 p-2 border border-gray-300 rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </label>
+
+      {errorMsg && <p className="text-red-600 text-sm">{errorMsg}</p>}
 
       <button
         type="submit"
-        className="bg-black text-white p-2 rounded shadow-md hover:bg-gray-800 transition"
+        className="bg-black text-white px-4 py-2 rounded-full w-fit"
       >
-        Log In
+        Login
       </button>
     </form>
   );

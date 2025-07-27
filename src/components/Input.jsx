@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { API_URL } from "../API";
+import { API_URL, BASE_URL } from "../api";
 
 export const Input = ({
   setThoughts,
@@ -8,39 +8,32 @@ export const Input = ({
   accessToken,
 }) => {
   const [loading, setLoading] = useState(false);
-
   const maxChars = 140;
   const minChars = 5;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!accessToken) return; // block if not logged in
-
     if (newThought.trim().length < minChars || newThought.length > maxChars)
       return;
 
     setLoading(true);
-
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(`${BASE_URL}/thoughts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: accessToken, // add token here
+          Authorization: accessToken || "", // optional for anonymous
         },
         body: JSON.stringify({ message: newThought }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to post the thought");
-      }
+      if (!response.ok) throw new Error("Failed to post the thought");
 
-      const createdThought = await response.json();
-      setThoughts((prev) => [createdThought, ...prev]);
+      const created = await response.json();
+      setThoughts((prev) => [created, ...prev]);
       setNewThought("");
-    } catch (error) {
-      console.error("Error posting thought:", error);
+    } catch (err) {
+      console.error("Error:", err);
     } finally {
       setLoading(false);
     }
@@ -48,59 +41,47 @@ export const Input = ({
 
   const charCount = newThought.length;
   const isTooShort = charCount > 0 && charCount < minChars;
-  const isMax = charCount === maxChars;
   const isTooLong = charCount > maxChars;
-
-  const isDisabled = isTooShort || isTooLong || loading || !accessToken;
+  const isDisabled = isTooShort || isTooLong || loading;
 
   return (
-    <form
-      id="thoughtForm"
-      className="grid grid-cols-1 gap-[10px]"
-      onSubmit={handleSubmit}
-    >
-      <label htmlFor="thoughtForm" className="text-[16px]">
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-[10px]">
+      <label htmlFor="textArea" className="text-[16px]">
         What's making you happy right now?
       </label>
+
       <textarea
-        maxLength={maxChars}
-        placeholder="React is making me happy!"
         id="textArea"
         value={newThought}
-        className="bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergrey text-[16px]"
-        onChange={(e) => {
-          const value = e.target.value;
-          if (value.length <= maxChars) {
-            setNewThought(value);
-          }
-        }}
+        onChange={(e) => setNewThought(e.target.value)}
+        maxLength={maxChars}
         rows={4}
-        disabled={!accessToken}
+        className="bg-white p-[10px] h-[60px] pb-[30px] border-1 border-bordergrey text-[16px]"
+        placeholder="React is making me happy!"
       />
 
       <p
         className={`text-sm ${
-          isTooShort || isMax ? "text-red-500" : "text-extragrey"
+          isTooShort || isTooLong ? "text-red-500" : "text-extragrey"
         }`}
       >
         {charCount}/{maxChars} characters
         {isTooShort && " — too short!"}
         {isTooLong && " — too long!"}
-        {isMax && " — limit reached!"}
-        {!accessToken && " — please log in to post"}
       </p>
 
       <button
         type="submit"
-        id="buttonBox"
         disabled={isDisabled}
-        className={`flex px-[25px] mt-[10px] gap-[5px] bg-heartgrey hover:bg-heartred place-items-center h-[50px] rounded-full w-fit text-[16px] ${
-          isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        className={`flex gap-2 px-6 py-3 rounded-full text-white font-medium transition ${
+          isDisabled
+            ? "bg-heartgrey cursor-not-allowed opacity-50"
+            : "bg-black hover:bg-gray-800 cursor-pointer"
         }`}
       >
-        <img src="./heart.png" alt="" role="presentation" />
+        <img src="./heart.png" alt="heart" className="w-5 h-5" />
         {loading ? "Sending..." : "Send Happy Thought"}
-        <img src="./heart.png" alt="" role="presentation" />
+        <img src="./heart.png" alt="heart" className="w-5 h-5" />
       </button>
     </form>
   );

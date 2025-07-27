@@ -1,11 +1,11 @@
-import { API_URL } from "../API";
+import { API_URL, BASE_URL } from "../API";
 
 export const Heart = ({ id, hearts, setThoughts, accessToken }) => {
   const handleLike = async () => {
     if (!accessToken) return; // block if not logged in
 
     try {
-      const response = await fetch(`${API_URL}/thoughts/${id}/like`, {
+      const response = await fetch(`${BASE_URL}/thoughts/${id}/like`, {
         method: "POST",
         headers: {
           Authorization: accessToken,

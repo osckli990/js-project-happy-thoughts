@@ -1,8 +1,10 @@
+import { motion } from "framer-motion";
 import { Heart } from "../components/Heart";
 import { Thought } from "../components/Thought";
 import { Time } from "../components/Time";
-import { motion } from "framer-motion";
+import { BASE_URL } from "../api";
 
+/* Displays a single thought with animation and edit/delete if it's the user's own */
 export const ThoughtCard = ({
   thought,
   setThoughts,
@@ -11,7 +13,7 @@ export const ThoughtCard = ({
 }) => {
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8080/thoughts/${id}`, {
+      const res = await fetch(`${BASE_URL}/thoughts/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: accessToken,
@@ -34,7 +36,7 @@ export const ThoughtCard = ({
     if (!newMessage) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/thoughts/${id}`, {
+      const res = await fetch(`${BASE_URL}/thoughts/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -50,50 +52,45 @@ export const ThoughtCard = ({
         const data = await res.json();
         alert(data.error);
       }
-    } catch (err) {
+    } catch {
       alert("Error editing thought");
     }
   };
 
   return (
-    <>
-      {thought.map((item) => (
-        <motion.article
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          key={item._id}
-          className="grid grid-cols-2 w-full border-1 border-bordergrey shadow-smallscreenbox sm:shadow-box p-[20px] items-center"
-          tabIndex={0}
-        >
-          <Thought message={item.message} />
-          <Heart
-            id={item._id}
-            hearts={item.hearts}
-            setThoughts={setThoughts}
-            accessToken={accessToken}
-          />
-          <Time time={item.createdAt} />
+    <motion.article
+      key={thought._id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="grid grid-cols-2 w-full border-1 border-bordergrey shadow-smallscreenbox sm:shadow-box p-[20px] items-center"
+      tabIndex={0}
+    >
+      <Thought message={thought.message} />
+      <Heart
+        id={thought._id}
+        hearts={thought.hearts}
+        setThoughts={setThoughts}
+        accessToken={accessToken}
+      />
+      <Time time={thought.createdAt} />
 
-          {/* Owner-only edit/delete buttons */}
-          {item.createdBy === loggedInUserId && (
-            <div className="col-span-2 mt-2 flex gap-4 justify-center">
-              <button
-                onClick={() => handleEdit(item._id, item.message)}
-                className="bg-yellow-300 px-3 py-1 rounded"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(item._id)}
-                className="bg-red-400 px-3 py-1 rounded"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </motion.article>
-      ))}
-    </>
+      {thought.createdBy === loggedInUserId && (
+        <div className="col-span-2 mt-2 flex gap-3 justify-center">
+          <button
+            onClick={() => handleEdit(thought._id, thought.message)}
+            className="bg-black text-white text-sm px-4 py-1 rounded-full"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDelete(thought._id)}
+            className="bg-black text-white text-sm px-4 py-1 rounded-full"
+          >
+            Delete
+          </button>
+        </div>
+      )}
+    </motion.article>
   );
 };
